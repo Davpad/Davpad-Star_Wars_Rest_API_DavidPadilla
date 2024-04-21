@@ -62,6 +62,17 @@ def get_all_people():
 
     return jsonify(response_body), 200
 
+@app.route('/people/<int:people_id>', methods=['GET'])
+def get_character(people_id):
+
+    character = Character.query.get(people_id)
+   
+    if character == None:
+        return jsonify({"msg" : "There is no such character"}), 404
+
+    return jsonify(character.serialize()), 200
+
+
 @app.route('/planets', methods=['GET'])
 def get_all_planets():
 
@@ -79,6 +90,17 @@ def get_all_planets():
 
     return jsonify(response_body), 200
 
+@app.route('/planets/<int:planet_id>', methods=['GET'])
+def get_planet(planet_id):
+
+    planet = Planet.query.get(planet_id)
+   
+    if planet == None:
+        return jsonify({"msg" : "There is no such planet"}), 404
+
+    return jsonify(planet.serialize()), 200
+
+
 @app.route('/vehicles', methods=['GET'])
 def get_all_vehicles():
 
@@ -95,6 +117,16 @@ def get_all_vehicles():
 
 
     return jsonify(response_body), 200
+
+@app.route('/vehicles/<int:vehicle_id>', methods=['GET'])
+def get_vehicle(vehicle_id):
+
+    vehicle = Vehicle.query.get(vehicle_id)
+   
+    if vehicle == None:
+        return jsonify({"msg" : "There is no such vehicle"}), 404
+
+    return jsonify(vehicle.serialize()), 200
 
 
 # this only runs if `$ python src/app.py` is executed
