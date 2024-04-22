@@ -8,7 +8,7 @@ from flask_swagger import swagger
 from flask_cors import CORS
 from utils import APIException, generate_sitemap
 from admin import setup_admin
-from models import db, User, Character, Planet, Vehicle
+from models import db, User, Character, Planet, Vehicle, FavoritesCharacters, FavoritesPlanets, FavoritesVehicles
 #from models import Person
 
 app = Flask(__name__)
@@ -72,6 +72,31 @@ def get_character(people_id):
 
     return jsonify(character.serialize()), 200
 
+@app.route('/favorite/people/<int:people_id>', methods=['POST'])
+def create_favorite_character(people_id):
+    
+    body = request.json
+    check_user = User.query.filter_by(id=body["id"]).first()
+    if check_user is None:
+        return jsonify({"msg" : "User doesn't exist"}), 404
+    else:
+        check_character = Character.query.filter_by(id=people_id).first()
+        if check_character is None:
+            return jsonify({"msg" : "Character doesn't exist"}), 404
+        else:
+            check_favorite_character = FavoritesCharacters.query.filter_by(character_id=people_id, user_id=body["id"]).first()
+            
+            if check_favorite_character is None:
+                new_favorite_character = FavoritesCharacters(user_id=body["id"], character_id=people_id)
+                db.session.add(new_favorite_character)
+                db.session.commit()
+                return jsonify({"msg" : "Character added to favorites"}), 200
+            
+            else:
+                return jsonify({"msg" : "Character repeated"}), 400
+
+
+
 
 @app.route('/planets', methods=['GET'])
 def get_all_planets():
@@ -100,6 +125,25 @@ def get_planet(planet_id):
 
     return jsonify(planet.serialize()), 200
 
+@app.route('/favorite/planet/<int:planet_id>', methods=['POST'])
+def create_favorite_planet(planet_id):
+    
+    body = request.json
+    check_user = FavoritesPlanets.query.filter_by(user_id=body["id"]).first()
+    if check_user is None:
+        return jsonify({"msg" : "User doesn't exist"}), 404
+    else:
+        check_favorite_planet = FavoritesPlanets.query.filter_by(planet_id=planet_id, user_id=body["id"]).first()
+
+        
+        if check_favorite_planet is None:
+            new_favorite_planet = FavoritesPlanets(user_id=body["id"], planet_id=planet_id)
+            db.session.add(new_favorite_planet)
+            db.session.commit()
+            return jsonify({"msg" : "Planet added to favorites"}), 200
+
+        else:
+            return jsonify({"msg" : "Planet repeated"}), 400
 
 @app.route('/vehicles', methods=['GET'])
 def get_all_vehicles():
@@ -128,6 +172,25 @@ def get_vehicle(vehicle_id):
 
     return jsonify(vehicle.serialize()), 200
 
+@app.route('/favorite/vehicle/<int:vehicle_id>', methods=['POST'])
+def create_favorite_vehicle(vehicle_id):
+    
+    body = request.json
+    check_user = FavoritesVehicles.query.filter_by(user_id=body["id"]).first()
+    if check_user is None:
+        return jsonify({"msg" : "User doesn't exist"}), 404
+    else:
+        check_favorite_vehicle = FavoritesVehicles.query.filter_by(vehicle_id=vehicle_id, user_id=body["id"]).first()
+
+        
+        if check_favorite_vehicle is None:
+            new_favorite_vehicle = FavoritesVehicles(user_id=body["id"], vehicle_id=vehicle_id)
+            db.session.add(new_favorite_vehicle)
+            db.session.commit()
+            return jsonify({"msg" : "Vehicle added to favorites"}), 200
+        
+        else:
+            return jsonify({"msg" : "Vehicle repeated"}), 400
 
 # this only runs if `$ python src/app.py` is executed
 if __name__ == '__main__':

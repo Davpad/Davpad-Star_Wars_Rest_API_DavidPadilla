@@ -1,4 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.orm import relationship
+
 
 db = SQLAlchemy()
 
@@ -7,9 +9,12 @@ class User(db.Model):
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(80), unique=False, nullable=False)
     is_active = db.Column(db.Boolean(), unique=False, nullable=False)
+    favorites_characters = relationship('FavoritesCharacters', backref='user', lazy=True)
+    favorites_planets = relationship('FavoritesPlanets', backref='user', lazy=True)
+    favorites_vehicles = relationship('FavoritesVehicles', backref='user', lazy=True)
 
     def __repr__(self):
-        return '<User %r>' % self.username
+        return '<User %r>' % self.email
 
     def serialize(self):
         return {
@@ -30,6 +35,8 @@ class Character(db.Model):
     hair_color = db.Column(db.String(80))
     language = db.Column(db.String(80))
     skin_color = db.Column(db.String(80))
+    favorites_characters = relationship('FavoritesCharacters', backref='character', lazy=True)
+
 
     def __repr__(self):
         return '<Character %r>' % self.id
@@ -61,6 +68,7 @@ class Planet(db.Model):
     rotational_period = db.Column(db.Integer)
     surface_water = db.Column(db.Integer)
     terrain = db.Column(db.String(80))
+    favorites_planets = relationship('FavoritesPlanets', backref='planet', lazy=True)
 
 
     def __repr__(self):
@@ -95,6 +103,7 @@ class Vehicle(db.Model):
     model = db.Column(db.String(80))
     passengers = db.Column(db.String(80))
     vehicle_class = db.Column(db.String(80))
+    favorites_vehicles = relationship('FavoritesVehicles', backref='vehicle', lazy=True)
 
 
     def __repr__(self):
@@ -121,10 +130,13 @@ class Vehicle(db.Model):
 class FavoritesCharacters(db.Model):
     __tablename__ = 'favorites_characters'
     id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    character_id = db.Column(db.Integer, db.ForeignKey('character.id'))
+
 
 
     def __repr__(self):
-        return '<FavoritesCharacters %r>' % self.name
+        return '<FavoritesCharacters %r>' % self.id
 
     def serialize(self):
         return {
@@ -136,6 +148,8 @@ class FavoritesCharacters(db.Model):
 class FavoritesPlanets(db.Model):
     __tablename__ = 'favorites_planets'
     id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    planet_id = db.Column(db.Integer, db.ForeignKey('planet.id'))
 
 
     def __repr__(self):
@@ -151,6 +165,8 @@ class FavoritesPlanets(db.Model):
 class FavoritesVehicles(db.Model):
     __tablename__ = 'favorites_vehicles'
     id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    vehicle_id = db.Column(db.Integer, db.ForeignKey('vehicle.id'))
 
 
     def __repr__(self):
