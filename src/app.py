@@ -129,21 +129,23 @@ def get_planet(planet_id):
 def create_favorite_planet(planet_id):
     
     body = request.json
-    check_user = FavoritesPlanets.query.filter_by(user_id=body["id"]).first()
+    check_user = User.query.filter_by(id=body["id"]).first()
     if check_user is None:
         return jsonify({"msg" : "User doesn't exist"}), 404
     else:
-        check_favorite_planet = FavoritesPlanets.query.filter_by(planet_id=planet_id, user_id=body["id"]).first()
-
-        
-        if check_favorite_planet is None:
-            new_favorite_planet = FavoritesPlanets(user_id=body["id"], planet_id=planet_id)
-            db.session.add(new_favorite_planet)
-            db.session.commit()
-            return jsonify({"msg" : "Planet added to favorites"}), 200
-
+        check_planet = Planet.query.filter_by(id=planet_id).first()
+        if check_planet is None:
+            return jsonify({"msg" : "Planet doesn't exist"}), 404
         else:
-            return jsonify({"msg" : "Planet repeated"}), 400
+            check_favorite_planet = FavoritesPlanets.query.filter_by(planet_id=planet_id, user_id=body["id"]).first()
+            if check_favorite_planet is None:
+                new_favorite_planet = FavoritesPlanets(user_id=body["id"], planet_id=planet_id)
+                db.session.add(new_favorite_planet)
+                db.session.commit()
+                return jsonify({"msg" : "Planet added to favorites"}), 200
+
+            else:
+                return jsonify({"msg" : "Planet repeated"}), 400
 
 @app.route('/vehicles', methods=['GET'])
 def get_all_vehicles():
@@ -176,21 +178,44 @@ def get_vehicle(vehicle_id):
 def create_favorite_vehicle(vehicle_id):
     
     body = request.json
-    check_user = FavoritesVehicles.query.filter_by(user_id=body["id"]).first()
+    check_user = User.query.filter_by(id=body["id"]).first()
     if check_user is None:
         return jsonify({"msg" : "User doesn't exist"}), 404
     else:
-        check_favorite_vehicle = FavoritesVehicles.query.filter_by(vehicle_id=vehicle_id, user_id=body["id"]).first()
-
-        
-        if check_favorite_vehicle is None:
-            new_favorite_vehicle = FavoritesVehicles(user_id=body["id"], vehicle_id=vehicle_id)
-            db.session.add(new_favorite_vehicle)
-            db.session.commit()
-            return jsonify({"msg" : "Vehicle added to favorites"}), 200
-        
+        check_vehicle = Vehicle.query.filter_by(id=vehicle_id).first()
+        if check_vehicle is None:
+            return jsonify({"msg" : "Vehicle doesn't exist"}), 404
         else:
-            return jsonify({"msg" : "Vehicle repeated"}), 400
+            check_favorite_vehicle = FavoritesVehicles.query.filter_by(vehicle_id=vehicle_id, user_id=body["id"]).first()
+            if check_favorite_vehicle is None:
+                new_favorite_vehicle = FavoritesVehicles(user_id=body["id"], vehicle_id=vehicle_id)
+                db.session.add(new_favorite_vehicle)
+                db.session.commit()
+                return jsonify({"msg" : "Vehicle added to favorites"}), 200
+            
+            else:
+                return jsonify({"msg" : "Vehicle repeated"}), 400
+            
+@app.route('/favorite/vehicle/<int:vehicle_id>', methods=['DELETE'])
+def delete_favorite_vehicle(vehicle_id):
+    
+    body = request.json
+    check_user = User.query.filter_by(id=body["id"]).first()
+    if check_user is None:
+        return jsonify({"msg" : "User doesn't exist"}), 404
+    else:
+        check_vehicle = Vehicle.query.filter_by(id=vehicle_id).first()
+        if check_vehicle is None:
+            return jsonify({"msg" : "Vehicle doesn't exist"}), 404
+        else:
+            check_favorite_vehicle = FavoritesVehicles.query.filter_by(vehicle_id=vehicle_id, user_id=body["id"]).first()
+            if check_favorite_vehicle is None:
+                return jsonify({"msg" : "Vehicle not found"}), 400
+            else:
+                delete_favorite_vehicle = FavoritesVehicles(user_id=body["id"], vehicle_id=vehicle_id)
+                db.session.delete(delete_favorite_vehicle)
+                db.session.commit()
+                return jsonify({"msg" : "Vehicle deleted from favorites"}), 200
 
 # this only runs if `$ python src/app.py` is executed
 if __name__ == '__main__':

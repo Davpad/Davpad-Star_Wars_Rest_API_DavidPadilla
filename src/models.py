@@ -153,7 +153,7 @@ class FavoritesPlanets(db.Model):
 
 
     def __repr__(self):
-        return '<FavoritesPlanets %r>' % self.name
+        return '<FavoritesPlanets %r>' % self.id
 
     def serialize(self):
         return {
@@ -170,7 +170,7 @@ class FavoritesVehicles(db.Model):
 
 
     def __repr__(self):
-        return '<FavoritesVehicles %r>' % self.name
+        return '<FavoritesVehicles %r>' % self.id
 
     def serialize(self):
         return {
