@@ -96,7 +96,26 @@ def create_favorite_character(people_id):
                 return jsonify({"msg" : "Character repeated"}), 400
 
 
-
+@app.route('/favorite/people/<int:people_id>', methods=['DELETE'])
+def delete_favorite_people(people_id):
+    
+    body = request.json
+    check_user = User.query.filter_by(id=body["id"]).first()
+    if check_user is None:
+        return jsonify({"msg" : "User doesn't exist"}), 404
+    else:
+        check_character = Character.query.filter_by(id=people_id).first()
+        if check_character is None:
+            return jsonify({"msg" : "Character doesn't exist"}), 404
+        else:
+            check_favorite_character = FavoritesCharacters.query.filter_by(character_id=people_id, user_id=body["id"]).first()
+            if check_favorite_character is None:
+                return jsonify({"msg" : "Character not found"}), 400
+            else:
+                delete_favorite_character = FavoritesCharacters.query.filter_by(character_id=people_id, user_id=body["id"]).first()
+                db.session.delete(delete_favorite_character)
+                db.session.commit()
+                return jsonify({"msg" : "Character deleted from favorites"}), 200
 
 @app.route('/planets', methods=['GET'])
 def get_all_planets():
@@ -146,6 +165,27 @@ def create_favorite_planet(planet_id):
 
             else:
                 return jsonify({"msg" : "Planet repeated"}), 400
+
+@app.route('/favorite/planet/<int:planet_id>', methods=['DELETE'])
+def delete_favorite_planet(planet_id):
+    
+    body = request.json
+    check_user = User.query.filter_by(id=body["id"]).first()
+    if check_user is None:
+        return jsonify({"msg" : "User doesn't exist"}), 404
+    else:
+        check_planet = Planet.query.filter_by(id=planet_id).first()
+        if check_planet is None:
+            return jsonify({"msg" : "Planet doesn't exist"}), 404
+        else:
+            check_favorite_planet = FavoritesPlanets.query.filter_by(planet_id=planet_id, user_id=body["id"]).first()
+            if check_favorite_planet is None:
+                return jsonify({"msg" : "Planet not found"}), 400
+            else:
+                delete_favorite_planet = FavoritesPlanets.query.filter_by(planet_id=planet_id, user_id=body["id"]).first()
+                db.session.delete(delete_favorite_planet)
+                db.session.commit()
+                return jsonify({"msg" : "Planet deleted from favorites"}), 200
 
 @app.route('/vehicles', methods=['GET'])
 def get_all_vehicles():
@@ -212,7 +252,7 @@ def delete_favorite_vehicle(vehicle_id):
             if check_favorite_vehicle is None:
                 return jsonify({"msg" : "Vehicle not found"}), 400
             else:
-                delete_favorite_vehicle = FavoritesVehicles(user_id=body["id"], vehicle_id=vehicle_id)
+                delete_favorite_vehicle = FavoritesVehicles.query.filter_by(vehicle_id=vehicle_id, user_id=body["id"]).first()
                 db.session.delete(delete_favorite_vehicle)
                 db.session.commit()
                 return jsonify({"msg" : "Vehicle deleted from favorites"}), 200
