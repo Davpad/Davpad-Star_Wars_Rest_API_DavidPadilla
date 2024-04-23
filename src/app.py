@@ -45,6 +45,23 @@ def handle_hello():
 
     return jsonify(response_body), 200
 
+@app.route('/users', methods=['GET'])
+def get_all_users():
+
+    query_results = User.query.all()
+    results = list(map(lambda item: item.serialize(), query_results))
+   
+    if results == []:
+        return jsonify({"msg" : "There is no users"}), 404
+
+    response_body = {
+        "msg": "Hello, this are the users ",
+        "results": results
+    }
+
+
+    return jsonify(response_body), 200
+
 @app.route('/people', methods=['GET'])
 def get_all_people():
 
@@ -56,6 +73,23 @@ def get_all_people():
 
     response_body = {
         "msg": "Hello, this is your GET /user response ",
+        "results": results
+    }
+
+
+    return jsonify(response_body), 200
+
+@app.route('/favorite/people', methods=['GET'])
+def get_all_favorite_people():
+
+    query_results = FavoritesCharacters.query.all()
+    results = list(map(lambda item: item.serialize(), query_results))
+   
+    if results == []:
+        return jsonify({"msg" : "There is no favorite characters"}), 404
+
+    response_body = {
+        "msg": "Hello, this are the favorite characters ",
         "results": results
     }
 
@@ -128,6 +162,23 @@ def get_all_planets():
 
     response_body = {
         "msg": "Hello, this is your GET /user response ",
+        "results": results
+    }
+
+
+    return jsonify(response_body), 200
+
+@app.route('/favorite/planets', methods=['GET'])
+def get_all_favorite_planets():
+
+    query_results = FavoritesPlanets.query.all()
+    results = list(map(lambda item: item.serialize(), query_results))
+   
+    if results == []:
+        return jsonify({"msg" : "There is no favorite planets"}), 404
+
+    response_body = {
+        "msg": "Hello, this are the favorite planets ",
         "results": results
     }
 
@@ -213,6 +264,23 @@ def get_vehicle(vehicle_id):
         return jsonify({"msg" : "There is no such vehicle"}), 404
 
     return jsonify(vehicle.serialize()), 200
+
+@app.route('/favorite/vehicles', methods=['GET'])
+def get_all_favorite_vehicles():
+
+    query_results = FavoritesVehicles.query.all()
+    results = list(map(lambda item: item.serialize(), query_results))
+   
+    if results == []:
+        return jsonify({"msg" : "There is no favorite vehicles"}), 404
+
+    response_body = {
+        "msg": "Hello, this are the favorite vehicles ",
+        "results": results
+    }
+
+
+    return jsonify(response_body), 200
 
 @app.route('/favorite/vehicle/<int:vehicle_id>', methods=['POST'])
 def create_favorite_vehicle(vehicle_id):
