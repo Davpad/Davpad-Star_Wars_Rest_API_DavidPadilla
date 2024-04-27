@@ -356,7 +356,6 @@ def login():
 def signup():
     email = request.json.get("email", None)
     password = request.json.get("password", None)
-    is_active = request.json.get("is_active", None)
 
     
     user_exist = User.query.filter_by(email=email).first()
