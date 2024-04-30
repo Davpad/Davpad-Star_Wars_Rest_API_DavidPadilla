@@ -10,9 +10,9 @@ class User(db.Model):
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(80), unique=False, nullable=False)
     # is_active = db.Column(db.Boolean(), unique=False, nullable=False)
-    favorites_characters = relationship('FavoritesCharacters', backref='user', lazy=True)
-    favorites_planets = relationship('FavoritesPlanets', backref='user', lazy=True)
-    favorites_vehicles = relationship('FavoritesVehicles', backref='user', lazy=True)
+    favorites_characters = db.relationship('FavoritesCharacters', backref='user', lazy=True)
+    favorites_planets = db.relationship('FavoritesPlanets', backref='user', lazy=True)
+    favorites_vehicles = db.relationship('FavoritesVehicles', backref='user', lazy=True)
 
     def __repr__(self):
         return '<User %r>' % self.email
@@ -20,7 +20,7 @@ class User(db.Model):
     def serialize(self):
         return {
             "id": self.id,
-            "email": self.email,
+            "email": self.email
             # do not serialize the password, its a security breach
         }
 
@@ -36,7 +36,7 @@ class Character(db.Model):
     hair_color = db.Column(db.String(80))
     language = db.Column(db.String(80))
     skin_color = db.Column(db.String(80))
-    favorites_characters = relationship('FavoritesCharacters', backref='character', lazy=True)
+    favorites_characters = db.relationship('FavoritesCharacters', backref='character', lazy=True)
 
 
     def __repr__(self):
@@ -50,10 +50,10 @@ class Character(db.Model):
             "lifespan": self.lifespan,
             "classification": self.classification,
             "designation": self.designation,
-            "eye color": self.eye_color,
-            "hair color": self.hair_color,
+            "eye_color": self.eye_color,
+            "hair_color": self.hair_color,
             "language": self.language,
-            "skin color": self.skin_color
+            "skin_color": self.skin_color
             # do not serialize the password, its a security breach
         } 
 
@@ -69,7 +69,7 @@ class Planet(db.Model):
     rotational_period = db.Column(db.Integer)
     surface_water = db.Column(db.Integer)
     terrain = db.Column(db.String(80))
-    favorites_planets = relationship('FavoritesPlanets', backref='planet', lazy=True)
+    favorites_planets = db.relationship('FavoritesPlanets', backref='planet', lazy=True)
 
 
     def __repr__(self):
@@ -78,15 +78,15 @@ class Planet(db.Model):
     def serialize(self):
         return {
             "id": self.id,
-            "Name": self.name,
-            "Climate": self.climate,
-            "Diameter": self.diameter,
-            "Gravity": self.gravity,
-            "Orbital period": self.orbital_period,
-            "Population": self.population,
-            "Rotational period": self.rotational_period,
-            "Surface water": self.surface_water,
-            "Terrain": self.terrain
+            "name": self.name,
+            "climate": self.climate,
+            "diameter": self.diameter,
+            "gravity": self.gravity,
+            "orbital_period": self.orbital_period,
+            "population": self.population,
+            "rotational_period": self.rotational_period,
+            "surface_water": self.surface_water,
+            "terrain": self.terrain
             # do not serialize the password, its a security breach
         }  
 
@@ -104,7 +104,7 @@ class Vehicle(db.Model):
     model = db.Column(db.String(80))
     passengers = db.Column(db.String(80))
     vehicle_class = db.Column(db.String(80))
-    favorites_vehicles = relationship('FavoritesVehicles', backref='vehicle', lazy=True)
+    favorites_vehicles = db.relationship('FavoritesVehicles', backref='vehicle', lazy=True)
 
 
     def __repr__(self):
@@ -113,17 +113,17 @@ class Vehicle(db.Model):
     def serialize(self):
         return {
             "id": self.id,
-            "Name": self.name,
-            "Cargo capacity": self.cargo_capacity,
-            "Consumables": self.consumables,
-            "Cost in credits": self.cost_in_credits,
-            "Crew": self.crew,
-            "Lenght": self.lenght,
-            "Manufacturer": self.manufacturer,
-            "Max speed": self.max_speed,
-            "Model": self.model,
-            "Passengers": self.passengers,
-            "Vehicle class": self.vehicle_class
+            "name": self.name,
+            "cargo_capacity": self.cargo_capacity,
+            "consumables": self.consumables,
+            "cost_in_credits": self.cost_in_credits,
+            "crew": self.crew,
+            "lenght": self.lenght,
+            "manufacturer": self.manufacturer,
+            "max_speed": self.max_speed,
+            "model": self.model,
+            "passengers": self.passengers,
+            "vehicle_class": self.vehicle_class
 
             # do not serialize the password, its a security breach
         }  
@@ -140,8 +140,11 @@ class FavoritesCharacters(db.Model):
         return '<FavoritesCharacters %r>' % self.id
 
     def serialize(self):
+        result= Character.query.filter_by(id=self.character_id).first()
         return {
             "id": self.id,
+            "character_id": result.serialize()["name"],
+            "user_id": self.user_id
 
             # do not serialize the password, its a security breach
         } 
@@ -157,8 +160,11 @@ class FavoritesPlanets(db.Model):
         return '<FavoritesPlanets %r>' % self.id
 
     def serialize(self):
+        result= Planet.query.filter_by(id=self.planet_id).first()
         return {
             "id": self.id,
+            "planet_id": result.serialize()["name"],
+            "user_id": self.user_id
 
             # do not serialize the password, its a security breach
         } 
@@ -174,8 +180,11 @@ class FavoritesVehicles(db.Model):
         return '<FavoritesVehicles %r>' % self.id
 
     def serialize(self):
+        result= Vehicle.query.filter_by(id=self.vehicle_id).first()
         return {
             "id": self.id,
+            "vehicle_id": result.serialize()["name"],
+            "user_id": self.user_id
 
             # do not serialize the password, its a security breach
         }      

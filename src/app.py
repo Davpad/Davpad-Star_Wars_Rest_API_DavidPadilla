@@ -107,12 +107,12 @@ def get_all_favorite():
         return jsonify({"msg" : "There is no favorites"}), 404
     else:
         response_body = {
-            "msg": "Hello, this are the favorite characters ",
+            "msg": "Ok ",
             "results": [           
                 results_characters,
                 results_planets,
                 results_vehicles
-                ]  
+            ]  
         }
 
 
