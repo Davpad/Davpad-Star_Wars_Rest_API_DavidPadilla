@@ -143,7 +143,7 @@ class FavoritesCharacters(db.Model):
         result= Character.query.filter_by(id=self.character_id).first()
         return {
             "id": self.id,
-            "character_id": result.serialize()["name"],
+            "name": result.serialize()["name"],
             "user_id": self.user_id
 
             # do not serialize the password, its a security breach
@@ -163,7 +163,7 @@ class FavoritesPlanets(db.Model):
         result= Planet.query.filter_by(id=self.planet_id).first()
         return {
             "id": self.id,
-            "planet_id": result.serialize()["name"],
+            "name": result.serialize()["name"],
             "user_id": self.user_id
 
             # do not serialize the password, its a security breach
@@ -183,7 +183,7 @@ class FavoritesVehicles(db.Model):
         result= Vehicle.query.filter_by(id=self.vehicle_id).first()
         return {
             "id": self.id,
-            "vehicle_id": result.serialize()["name"],
+            "name": result.serialize()["name"],
             "user_id": self.user_id
 
             # do not serialize the password, its a security breach
