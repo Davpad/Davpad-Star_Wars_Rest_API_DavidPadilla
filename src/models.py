@@ -29,12 +29,10 @@ class Character(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(120), nullable=False)
     height = db.Column(db.Integer)
-    lifespan = db.Column(db.Integer)
-    classification = db.Column(db.String(80))
-    designation = db.Column(db.String(80))
+    url = db.Column(db.String(80))
+    description = db.Column(db.String(80))
     eye_color = db.Column(db.String(80))
     hair_color = db.Column(db.String(80))
-    language = db.Column(db.String(80))
     skin_color = db.Column(db.String(80))
     favorites_characters = db.relationship('FavoritesCharacters', backref='character', lazy=True)
 
@@ -47,12 +45,10 @@ class Character(db.Model):
             "id": self.id,
             "name": self.name,
             "height": self.height,
-            "lifespan": self.lifespan,
-            "classification": self.classification,
-            "designation": self.designation,
+            "url": self.url,
+            "description": self.description,
             "eye_color": self.eye_color,
             "hair_color": self.hair_color,
-            "language": self.language,
             "skin_color": self.skin_color
             # do not serialize the password, its a security breach
         } 
