@@ -74,16 +74,16 @@ def setup_commands(app):
             db.session.commit()
 
             planets = [
-                Planet(id="1", name="Tatooine", climate="arid", diameter="10465", gravity="1 standard", orbital_period="304", population="200000", rotational_period="23", surface_water="1", terrain="desert"),
-                Planet(id="2", name="Alderaan", climate="temperate", diameter="12500", gravity="1 standard", orbital_period="364", population="2000000000", rotational_period="24", surface_water="40", terrain="grassland, mountains"),
-                Planet(id="3", name="Yavin IV", climate="temperate, tropical", diameter="10200", gravity="1 standard", orbital_period="4818", population="1000", rotational_period="24", surface_water="8", terrain="jungle, rainforests"),
-                Planet(id="1", name="Tatooine", climate="arid", diameter="10465", gravity="1 standard", orbital_period="304", population="200000", rotational_period="23", surface_water="1", terrain="desert"),
-                Planet(id="1", name="Tatooine", climate="arid", diameter="10465", gravity="1 standard", orbital_period="304", population="200000", rotational_period="23", surface_water="1", terrain="desert"),
-                Planet(id="1", name="Tatooine", climate="arid", diameter="10465", gravity="1 standard", orbital_period="304", population="200000", rotational_period="23", surface_water="1", terrain="desert"),
-                Planet(id="1", name="Tatooine", climate="arid", diameter="10465", gravity="1 standard", orbital_period="304", population="200000", rotational_period="23", surface_water="1", terrain="desert"),
-                Planet(id="1", name="Tatooine", climate="arid", diameter="10465", gravity="1 standard", orbital_period="304", population="200000", rotational_period="23", surface_water="1", terrain="desert"),
-                Planet(id="1", name="Tatooine", climate="arid", diameter="10465", gravity="1 standard", orbital_period="304", population="200000", rotational_period="23", surface_water="1", terrain="desert"),
-                Planet(id="1", name="Tatooine", climate="arid", diameter="10465", gravity="1 standard", orbital_period="304", population="200000", rotational_period="23", surface_water="1", terrain="desert")
+                Planet(uid="1", name="Tatooine", climate="arid", diameter="10465", gravity="1 standard", orbital_period="304", population="200000", rotational_period="23", surface_water="1", terrain="desert"),
+                Planet(uid="2", name="Alderaan", climate="temperate", diameter="12500", gravity="1 standard", orbital_period="364", population="2000000000", rotational_period="24", surface_water="40", terrain="grassland, mountains"),
+                Planet(uid="3", name="Yavin IV", climate="temperate, tropical", diameter="10200", gravity="1 standard", orbital_period="4818", population="1000", rotational_period="24", surface_water="8", terrain="jungle, rainforests"),
+                Planet(uid="4", name="Hoth", climate="frozen", diameter="7200", gravity="1.1 standard", orbital_period="549", population="unknown", rotational_period="23", surface_water="100", terrain="tundra, ice caves, mountain ranges"),
+                Planet(uid="5", name="Dagobah", climate="murky", diameter="8900", gravity="N/A", orbital_period="341", population="unknown", rotational_period="23", surface_water="8", terrain="swamp, jungles"),
+                Planet(uid="6", name="Bespin", climate="temperate", diameter="118000", gravity="1.5 (surface), 1 standard (Cloud City)", orbital_period="5110", population="6000000", rotational_period="12", surface_water="0", terrain="gas giant"),
+                Planet(uid="7", name="Endor", climate="temperate", diameter="4900", gravity="0.85 standard", orbital_period="402", population="30000000", rotational_period="18", surface_water="8", terrain="forests, mountains, lakes"),
+                Planet(uid="8", name="Naboo", climate="temperate", diameter="12120", gravity="1 standard", orbital_period="312", population="4500000000", rotational_period="26", surface_water="12", terrain="grassy hills, swamps, forests, mountains"),
+                Planet(uid="9", name="Coruscant", climate="temperate", diameter="12240", gravity="1 standard", orbital_period="368", population="1000000000000", rotational_period="24", surface_water="unknown", terrain="cityscape, mountains"),
+                Planet(uid="10", name="Kamino", climate="temperate", diameter="19720", gravity="1 standard", orbital_period="462", population="1000000000", rotational_period="27", surface_water="100", terrain="ocean")
             ]
             db.session.add_all(planets)
             db.session.commit()
